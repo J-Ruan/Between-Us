@@ -65,6 +65,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             assets.value = dao.assets().associate { it.id to it.path }
         }
 
+    fun recognizeAgain(message: Message) =
+        run("正在重新识别原图") {
+            val assetId = message.assetId ?: error("此消息没有关联原图")
+            ImportOcr(app, dao).recognizeAgain(assetId) { status.value = it }
+        }
+
     fun install(uri: Uri, hash: String) = run("正在校验、加载并测试模型，请耐心等待") { app.ai.install(uri, hash) }
 
     fun edit(m: Message, text: String, sender: String, date: String, time: String) =

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="cn.shiyan.betweenus.DatabaseTest" tests="13" failures="0" errors="0" skipped="0" time="924.769" timestamp="2026-10-30T07:59:10" hostname="localhost">
+  <properties>
+    <property name="device" value="shiyan(AVD) - 11" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="tenThousandPersistAndPageWithoutLoss" classname="cn.shiyan.betweenus.DatabaseTest" time="35.749" />
+  <testcase name="crudReferenceAndInvalidation" classname="cn.shiyan.betweenus.DatabaseTest" time="0.457" />
+  <testcase name="checkpointSurvivesReload" classname="cn.shiyan.betweenus.DatabaseTest" time="0.305" />
+  <testcase name="bundledChineseOcr" classname="cn.shiyan.betweenus.IntegrationTest" time="10.161" />
+  <testcase name="startsWithoutModelAndHasNoInternetPermission" classname="cn.shiyan.betweenus.IntegrationTest" time="32.979" />
+  <testcase name="encryptedDatabaseBackupRestoreAndExports" classname="cn.shiyan.betweenus.IntegrationTest" time="58.984" />
+  <testcase name="explicitSimplificationNeverChangesRawText" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="1.536" />
+  <testcase name="recognizeAgainPreservesUserMessagesAndCreatesDrafts" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="10.348" />
+  <testcase name="transparentImageCompositedOnWhite" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="9.268" />
+  <testcase name="darkSimplifiedLongScreenshotUsesRealBundledRecognizer" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="328.402" />
+  <testcase name="longSimplifiedScreenshotRetainsChineseAndBoundaryMessage" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="329.864" />
+  <testcase name="blankScreenshotContainsNoInventedText" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="5.802" />
+  <testcase name="fineSimplifiedChineseGlyphsOnChatBubbles" classname="cn.shiyan.betweenus.LongScreenshotOcrTest" time="90.686" />
+</testsuite>

@@ -334,7 +334,7 @@ fun ShiyanUi(vm: AppViewModel = viewModel(), unlocked: Boolean = true) {
                         if (stream.isNotBlank()) item { Text(stream) }
                     }
                     section == "隐私与关于" -> {
-                        item { Heading("属于你的，留在你这里。", "拾言 0.1.0-beta.1") }
+                        item { Heading("属于你的，留在你这里。", "拾言 0.1.0-beta.2") }
                         item {
                             Text(
                                 "无需账号、服务器、云端 AI、广告或分析 SDK。应用不声明 INTERNET 权限。\n\n聊天数据库使用 SQLCipher 加密，随机数据库密钥由 Android Keystore 包装。截图位于系统隔离的私有目录，未额外逐文件加密。\n\n备份使用 PBKDF2-HMAC-SHA256（210,000 次）与 AES-256-GCM。密码遗失无法恢复。模型不包含在备份中。\n\nOCR 和小模型可能出错，必须人工校对。应用锁依赖系统生物识别或锁屏凭据；不替代设备本身的安全。分享和导出文件离开私有目录后，由你负责保管。\n\n这是开发测试版，具体已验证范围见仓库测试报告。"
@@ -566,6 +566,28 @@ fun ShiyanUi(vm: AppViewModel = viewModel(), unlocked: Boolean = true) {
                                 Text("保存回忆空间昵称")
                             }
                         }
+                        item {
+                            var simplified by remember {
+                                mutableStateOf(prefs.getBoolean("ocrSimplified", false))
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    Text("将新识别结果整理为简体")
+                                    Text(
+                                        "可选文字转换，不代表 OCR 更准确；保留原始识别供校对。Android 10 及以上可用。",
+                                        style = MaterialTheme.typography.bodySmall,
+                                    )
+                                }
+                                Switch(
+                                    checked = simplified,
+                                    enabled = ChineseScript.supported,
+                                    onCheckedChange = {
+                                        simplified = it
+                                        prefs.edit().putBoolean("ocrSimplified", it).apply()
+                                    },
+                                )
+                            }
+                        }
                         items(listOf("AI 模型管理", "记忆管理", "备份与导出", "隐私与关于")) { s ->
                             ListItem(
                                 headlineContent = { Text(s) },
@@ -676,6 +698,7 @@ fun ShiyanUi(vm: AppViewModel = viewModel(), unlocked: Boolean = true) {
                         "上移" -> vm.move(m)
                         "合并下一条" -> vm.merge(m)
                         "按行拆分" -> vm.split(m)
+                        "重新识别原图（保留已有消息）" -> vm.recognizeAgain(m)
                     }
                     edit = null
                 },
@@ -888,6 +911,11 @@ private fun MessageDialog(
                             contentDescription = "原始聊天截图",
                             modifier = Modifier.fillMaxWidth().height(230.dp),
                         )
+                    if (m.originalText != m.text)
+                        Text(
+                            "原始文字：${m.originalText}\n当前文字与原始结果不同，请对照截图或原始记录校对。",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                     Field(text, { text = it }, "聊天正文")
                     Field(sender, { sender = it }, "发送者")
                     Row {
@@ -897,7 +925,11 @@ private fun MessageDialog(
                     Field(date, { date = it }, "日期（未知留空，YYYY-MM-DD）")
                     Field(time, { time = it }, "时间（未知留空，HH:mm）")
                     Text("消息 ID：${m.id}", style = MaterialTheme.typography.labelSmall)
-                    FlowActions(listOf("上移", "合并下一条", "按行拆分", "删除"), onAction)
+                    FlowActions(
+                        listOf("上移", "合并下一条", "按行拆分", "删除") +
+                            if (asset != null) listOf("重新识别原图（保留已有消息）") else emptyList(),
+                        onAction,
+                    )
                 }
             }
         },

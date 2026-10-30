@@ -78,7 +78,14 @@ data class Source(
     fun render() = "[$id] ${date ?: "日期待确认"} $sender: $text\n"
 }
 
-data class OcrLine(val text: String, val left: Int, val top: Int, val right: Int, val bottom: Int)
+data class OcrLine(
+    val text: String,
+    val left: Int,
+    val top: Int,
+    val right: Int,
+    val bottom: Int,
+    val originalText: String = text,
+)
 
 data class Parsed(
     val text: String,
@@ -86,6 +93,7 @@ data class Parsed(
     val date: String?,
     val time: String?,
     val top: Int,
+    val originalText: String = text,
 )
 
 object ChatParser {
@@ -121,7 +129,7 @@ object ChatParser {
             }
             val center = (line.left + line.right) / 2.0 / width
             val side = if (center < .45) "左侧" else if (center > .55) "右侧" else "待确认"
-            result += Parsed(text, side, day, clock, line.top)
+            result += Parsed(text, side, day, clock, line.top, line.originalText)
         }
         return result
     }

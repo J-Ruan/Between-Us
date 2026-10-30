@@ -4,7 +4,8 @@
 
 - `core/Memory.kt`：UTF-8 上界预算、无丢失消息分段、左右／日期解析、相邻重叠建议、引用 ID 校验、备份密码学、HTML 转义。
 - `app/Data.kt`：Room 实体、DAO、Repository；UI 不直接编写 SQL。
-- `ImportOcr.kt`：串行复制与去重、下采样、EXIF 方向、Bundled 中文 OCR；识别待人工确认。
+- `ImportOcr.kt` / `ScreenshotOcr.kt`：串行复制与图片去重，BitmapRegionDecoder 按宽度控制采样，按 768 像素核心区域加 128 像素上下文分段，避免按长图高度缩小中文笔画。灰度对比度、透明图白底与细字放大后执行 Bundled 中文 OCR；坐标映射回原图，以像素区域合并重叠检测。
+- `ChineseScript.kt`：Android ICU 可选繁转简，默认关闭，原始 OCR 通过 OcrLine → Parsed → Message.originalText 保留；整理文本仍是待校对内容。它不是识别或事实纠错。
 - `LocalAi.kt`：单引擎互斥、CPU、后台初始化、流式生成、取消和资源释放；模型安装候选先验证，再替换原文件。
 - `MemoryWorker.kt`：原文分页、稳定批次 ID、原子保存依赖、持久化进度、递归日／周／月／年合并。
 - `AppViewModel.kt`：异步用例与状态；`Ui.kt`：中文 Compose 界面；`MainActivity.kt`：生命周期与应用锁。

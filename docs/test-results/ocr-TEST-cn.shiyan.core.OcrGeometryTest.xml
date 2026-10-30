@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cn.shiyan.core.OcrGeometryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-30T07:26:03.495Z" hostname="50c6376a4406" time="0.02">
+  <properties/>
+  <testcase name="veryWideImageMemoryIsBoundedByWidthOnly" classname="cn.shiyan.core.OcrGeometryTest" time="0.001"/>
+  <testcase name="allExifOrientationsMapWholeImageToOriginal" classname="cn.shiyan.core.OcrGeometryTest" time="0.0"/>
+  <testcase name="rotatedAndMirroredCropsStayWithinEncodedRaster" classname="cn.shiyan.core.OcrGeometryTest" time="0.001"/>
+  <testcase name="traditionalOriginalIsNeverSilentlyConverted" classname="cn.shiyan.core.OcrGeometryTest" time="0.003"/>
+  <testcase name="repeatedPhrasesAtDifferentPositionsArePreserved" classname="cn.shiyan.core.OcrGeometryTest" time="0.0"/>
+  <testcase name="paddingPreservesCrossBoundaryText" classname="cn.shiyan.core.OcrGeometryTest" time="0.0"/>
+  <testcase name="longScreenshotDoesNotShrinkGlyphs" classname="cn.shiyan.core.OcrGeometryTest" time="0.0"/>
+  <testcase name="everyScanlineBelongsToExactlyOneTile" classname="cn.shiyan.core.OcrGeometryTest" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

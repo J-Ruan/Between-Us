@@ -1,25 +1,50 @@
 package cn.shiyan.betweenus
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.exifinterface.media.ExifInterface
 import cn.shiyan.core.*
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions
 import java.io.File
 import java.security.MessageDigest
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 class ImportOcr(private val context: Context, private val dao: MemoryDao) {
+    /** Existing messages remain intact; the new result is a separate, unconfirmed draft. */
+    suspend fun recognizeAgain(assetId: String, progress: (String) -> Unit) =
+        withContext(Dispatchers.IO) {
+            val asset = dao.assets().firstOrNull { it.id == assetId } ?: error("原图不存在")
+            val result =
+                ScreenshotOcr(
+                        simplifyChinese =
+                            context
+                                .getSharedPreferences("settings", Context.MODE_PRIVATE)
+                                .getBoolean("ocrSimplified", false)
+                    )
+                    .recognize(File(asset.path)) { segment, total ->
+                        progress("重新识别原图 · 分段 $segment/$total")
+                    }
+            val parsed = ChatParser.parse(result.lines, result.width)
+            require(parsed.isNotEmpty()) { "没有识别到文字，请检查原图是否清晰" }
+            val now = System.currentTimeMillis()
+            dao.put(
+                parsed.mapIndexed { index, p ->
+                    Message(
+                        assetId = asset.id,
+                        text = p.text,
+                        originalText = p.originalText,
+                        sender = p.side,
+                        date = p.date,
+                        time = p.time,
+                        position = now + index,
+                    )
+                }
+            )
+            progress("重新识别完成：已添加 ${parsed.size} 条待校对消息。原有消息已保留，请核对后删除旧的错误结果。")
+        }
+
     suspend fun import(uris: List<Uri>, progress: (String) -> Unit) =
         withContext(Dispatchers.IO) {
             val task = ImportTask(total = uris.size)
             dao.put(task)
-            val recognizer =
-                TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
             var previous = emptyList<Parsed>()
             val errors = mutableListOf<String>()
             try {
@@ -59,45 +84,22 @@ class ImportOcr(private val context: Context, private val dao: MemoryDao) {
                                 file.delete()
                                 continue
                             }
-                            val opt = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                            BitmapFactory.decodeFile(file.path, opt)
-                            require(opt.outWidth > 0 && opt.outHeight > 0) { "无法解码图片" }
-                            opt.inJustDecodeBounds = false
-                            opt.inSampleSize = 1
-                            while (maxOf(opt.outWidth, opt.outHeight) / opt.inSampleSize > 3000) opt
-                                .inSampleSize *= 2
-                            val bitmap = BitmapFactory.decodeFile(file.path, opt) ?: error("无法读取图片")
-                            val rotation =
-                                when (
-                                    ExifInterface(file)
-                                        .getAttributeInt(ExifInterface.TAG_ORIENTATION, 1)
-                                ) {
-                                    6 -> 90
-                                    3 -> 180
-                                    8 -> 270
-                                    else -> 0
-                                }
                             val result =
-                                try {
-                                    recognizer
-                                        .process(InputImage.fromBitmap(bitmap, rotation))
-                                        .await()
-                                } finally {
-                                    bitmap.recycle()
-                                }
-                            val width =
-                                if (rotation == 90 || rotation == 270)
-                                    opt.outHeight / opt.inSampleSize
-                                else opt.outWidth / opt.inSampleSize
-                            val lines =
-                                result.textBlocks.flatMap { block ->
-                                    block.lines.mapNotNull { line ->
-                                        line.boundingBox?.let {
-                                            OcrLine(line.text, it.left, it.top, it.right, it.bottom)
-                                        }
+                                ScreenshotOcr(
+                                        simplifyChinese =
+                                            context
+                                                .getSharedPreferences(
+                                                    "settings",
+                                                    Context.MODE_PRIVATE,
+                                                )
+                                                .getBoolean("ocrSimplified", false)
+                                    )
+                                    .recognize(file) { segment, total ->
+                                        progress(
+                                            "正在识别第 ${index+1}/${uris.size} 张 · 分段 $segment/$total"
+                                        )
                                     }
-                                }
-                            val parsed = ChatParser.parse(lines, width)
+                            val parsed = ChatParser.parse(result.lines, result.width)
                             require(parsed.isNotEmpty()) { "没有识别到文字" }
                             val overlap = ChatParser.overlap(previous, parsed)
                             dao.put(ScreenshotAsset(id, file.path, hash))
@@ -106,6 +108,7 @@ class ImportOcr(private val context: Context, private val dao: MemoryDao) {
                                     Message(
                                         assetId = id,
                                         text = p.text,
+                                        originalText = p.originalText,
                                         sender = p.side,
                                         date = p.date,
                                         time = p.time,
@@ -137,8 +140,6 @@ class ImportOcr(private val context: Context, private val dao: MemoryDao) {
             } catch (c: CancellationException) {
                 dao.put(task.copy(status = "已取消"))
                 throw c
-            } finally {
-                recognizer.close()
             }
         }
 }

@@ -4,12 +4,13 @@
 
 An offline-first native Android app for private chat memories, bundled Chinese OCR, hierarchical memory and on-device AI.
 
-**状态：0.1.0-beta.1 开发测试版。并非任务书全部功能已验收的正式版本。** 实际运行结果见 [测试报告](docs/TESTING.md)，功能边界见 [测试版说明](docs/RELEASE.md)。没有使用演示聊天或预设文字冒充 AI。
+**状态：0.1.0-beta.2 开发测试版。并非任务书全部功能已验收的正式版本。** 实际运行结果见 [测试报告](docs/TESTING.md)，功能边界见 [测试版说明](docs/RELEASE.md)。没有使用演示聊天或预设文字冒充 AI。
 
 ## 已接入的功能
 
 - Kotlin / Compose / Material 3 四页导航：首页、时间线、回忆录、我的；温暖浅色与深色主题。
-- Photo Picker 与 SAF 批量选图、图片 SHA-256 重复检测、原图保留、串行中文 OCR（模型随 APK 安装）。
+- Photo Picker 与 SAF 批量选图、图片 SHA-256 重复检测、原图保留、串行中文 OCR（模型随 APK 安装）。beta.2 修复长截图被整图缩小的问题，使用短段解码、细字放大与对比度预处理。
+- 可选简体整理（默认关闭，Android 10+），保留未经转换的原始 OCR；已保存的截图可以重新识别，旧消息不覆盖。详见 [OCR 修复与回归](docs/TESTING-OCR.md)。
 - OCR 左右位置与日期识别、原图对照、文字／发送者／时间校对、上移、合并、按行拆分和删除。识别结果默认未确认；相邻重复仅作为提示，不自动删除。
 - Room + SQLCipher 数据库、原始文字与编辑修订、消息 ID 和故事引用、用户确认事件、收藏与搜索。
 - Qwen3-0.6B 的 LiteRT-LM CPU 引擎：SAF 侧载、SHA-256 校验、加载与推理检查、流式生成、取消、删除模型。没有模型时保留其他功能和明确标注的基础报告模板。
@@ -60,7 +61,7 @@ python3 scripts/check_apk.py
 ./gradlew connectedDebugAndroidTest
 ```
 
-`testDebugUnitTest` 的 Android 模块没有 JVM 测试；真正执行的 26 项 JVM 测试位于 `:core:test`。设备测试独立验证数据库、真实中文 OCR、备份恢复、导出和启动，结果不能由零测试任务代替。
+`testDebugUnitTest` 的 Android 模块没有 JVM 测试；真正执行的 34 项 JVM 测试位于 `:core:test`。设备测试独立验证数据库、真实中文 OCR、备份恢复、导出和启动，结果不能由零测试任务代替。
 
 ## 常见问题
 
