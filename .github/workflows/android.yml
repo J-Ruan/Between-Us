@@ -16,17 +16,27 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - name: Install pinned Android platform using runner SDK
-        shell: bash
+      - name: Verify preinstalled Android SDK
         run: |
-          python3 - <<'PYSDK'
-          import subprocess
-          subprocess.run(["sdkmanager", "--licenses"], input="y\n" * 200, text=True, check=True)
-          PYSDK
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          test -f "$ANDROID_HOME/platforms/android-35/android.jar" || { echo "::error::Runner is missing Android SDK 35"; exit 1; }
+          test -x "$ANDROID_HOME/build-tools/35.0.0/aapt2" || { echo "::error::Runner is missing Build Tools 35.0.0"; exit 1; }
       - uses: gradle/actions/setup-gradle@v4
       - name: Test, lint and build
-        run: ./gradlew :core:test testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest --no-daemon
+        shell: bash
+        run: |
+          set +e
+          ./gradlew :core:test testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest --no-daemon > build.log 2>&1
+          result=$?
+          cat build.log
+          if [ "$result" -ne 0 ]; then
+            python3 - <<'PYERROR'
+          from pathlib import Path
+          text = "\n".join(Path("build.log").read_text().splitlines()[-60:])
+          text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+          print("::error title=Gradle failed::" + text)
+          PYERROR
+          fi
+          exit "$result"
       - name: Inspect APK and merged manifest
         run: python3 scripts/check_apk.py
       - uses: actions/upload-artifact@v4
