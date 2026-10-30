@@ -9,14 +9,21 @@ permissions:
   contents: read
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
+      - name: Install pinned Android platform using runner SDK
+        shell: bash
+        run: |
+          python3 - <<'PYSDK'
+          import subprocess
+          subprocess.run(["sdkmanager", "--licenses"], input="y\n" * 200, text=True, check=True)
+          PYSDK
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - uses: gradle/actions/setup-gradle@v4
       - name: Test, lint and build
         run: ./gradlew :core:test testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest --no-daemon
@@ -39,7 +46,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" app/build/outputs/apk/debug/app-debug.apk SHA256SUMS.txt --prerelease --title "拾言 $GITHUB_REF_NAME" --notes-file docs/RELEASE.md
+        run: |
+          # A -ci.N tag retries an unpublished release without moving its existing source tag.
+          release_tag="${GITHUB_REF_NAME%%-ci.*}"
+          gh release create "$release_tag" app/build/outputs/apk/debug/app-debug.apk SHA256SUMS.txt --verify-tag --prerelease --title "拾言 $release_tag" --notes-file docs/RELEASE.md
         # This step uses only the workflow-scoped GITHUB_TOKEN.
     permissions:
       contents: write
