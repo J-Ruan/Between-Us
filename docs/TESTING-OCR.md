@@ -34,3 +34,9 @@ JUnit 原始结果见 [Android](test-results/ocr-android.xml)、[OCR 几何](tes
 尚未在荣耀 90 实测时延与内存峰值。原有 AI 模型加载与性能限制仍见 RELEASE.md，此修复未声称补齐全部原始任务书功能。
 
 本地 APK 大小：104,502,016 字节，SHA-256：`538f0cb5d41be1b9ed9e830882b77ce8f698b2b1431e48445e556a4bb6456054`。发布 APK 使用独立 GitHub runner Debug 签名，需以 Release 校验文件为准。若升级签名冲突，务必先备份，不能直接卸载清空私人资料。
+
+## 发布制品验证
+
+[beta.2 发布构建](https://github.com/J-Ruan/Between-Us/actions/runs/41023793584) 成功（2m23s），[Release](https://github.com/J-Ruan/Between-Us/releases/tag/v0.1.0-beta.2) 实际包含 APK 与校验文件。发布 APK 已重新下载，SHA-256 与 Release 文件一致，签名、ZIP 对齐、无 INTERNET 权限、无 Qwen 权重检查通过。
+
+发布 APK SHA-256：`699b01ae11f5d722ea16d1729aee54916c7e80bc431aeb778729b921cc82fda1`。这是 runner 签名的发布文件，区别于上面的本地构建哈希。
