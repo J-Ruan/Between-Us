@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cn.shiyan.core.MemoryTest" tests="26" skipped="0" failures="0" errors="0" timestamp="2026-10-30T06:25:30.921Z" hostname="50c6376a4406" time="1.073">
+  <properties/>
+  <testcase name="randomSaltAndNonce" classname="cn.shiyan.core.MemoryTest" time="0.409"/>
+  <testcase name="adjacentOverlapSuggestedWithoutDeleting" classname="cn.shiyan.core.MemoryTest" time="0.012"/>
+  <testcase name="normalizeWhitespace" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="citationsValidated" classname="cn.shiyan.core.MemoryTest" time="0.007"/>
+  <testcase name="backupRoundTrip" classname="cn.shiyan.core.MemoryTest" time="0.226"/>
+  <testcase name="stableVerticalOrderAndSides" classname="cn.shiyan.core.MemoryTest" time="0.006"/>
+  <testcase name="shortPasswordRejected" classname="cn.shiyan.core.MemoryTest" time="0.0"/>
+  <testcase name="wrongPasswordRejected" classname="cn.shiyan.core.MemoryTest" time="0.13"/>
+  <testcase name="emptyInputCreatesNoBatches" classname="cn.shiyan.core.MemoryTest" time="0.002"/>
+  <testcase name="fullBudgetReservesOutputAndTemplate" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="process1000" classname="cn.shiyan.core.MemoryTest" time="0.056"/>
+  <testcase name="fabricatedCitationRejected" classname="cn.shiyan.core.MemoryTest" time="0.002"/>
+  <testcase name="exactBoundaryPreservesMessage" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="process100" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="tamperedBackupRejected" classname="cn.shiyan.core.MemoryTest" time="0.128"/>
+  <testcase name="invalidDateNotFabricated" classname="cn.shiyan.core.MemoryTest" time="0.003"/>
+  <testcase name="byteBudgetIncludesChineseAndEmoji" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="htmlEscapesUserContent" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="longSingleMessageKeepsIdAndUnicode" classname="cn.shiyan.core.MemoryTest" time="0.024"/>
+  <testcase name="missingDatesStayUnknown" classname="cn.shiyan.core.MemoryTest" time="0.0"/>
+  <testcase name="oversizedPromptRejected" classname="cn.shiyan.core.MemoryTest" time="0.0"/>
+  <testcase name="datesAndTimesAreMetadata" classname="cn.shiyan.core.MemoryTest" time="0.001"/>
+  <testcase name="repeatedShortPhraseNeverDeduplicated" classname="cn.shiyan.core.MemoryTest" time="0.0"/>
+  <testcase name="invalidBackupVersionRejected" classname="cn.shiyan.core.MemoryTest" time="0.0"/>
+  <testcase name="process10000" classname="cn.shiyan.core.MemoryTest" time="0.057"/>
+  <testcase name="overlapRespectsSenderAndTime" classname="cn.shiyan.core.MemoryTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

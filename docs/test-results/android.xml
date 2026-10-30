@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="cn.shiyan.betweenus.DatabaseTest" tests="6" failures="0" errors="0" skipped="0" time="140.074" timestamp="2026-10-30T06:28:59" hostname="localhost">
+  <properties>
+    <property name="device" value="shiyan(AVD) - 11" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="tenThousandPersistAndPageWithoutLoss" classname="cn.shiyan.betweenus.DatabaseTest" time="31.024" />
+  <testcase name="crudReferenceAndInvalidation" classname="cn.shiyan.betweenus.DatabaseTest" time="0.483" />
+  <testcase name="checkpointSurvivesReload" classname="cn.shiyan.betweenus.DatabaseTest" time="0.229" />
+  <testcase name="bundledChineseOcr" classname="cn.shiyan.betweenus.IntegrationTest" time="9.771" />
+  <testcase name="startsWithoutModelAndHasNoInternetPermission" classname="cn.shiyan.betweenus.IntegrationTest" time="28.765" />
+  <testcase name="encryptedDatabaseBackupRestoreAndExports" classname="cn.shiyan.betweenus.IntegrationTest" time="61.595" />
+</testsuite>
