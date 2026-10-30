@@ -43,3 +43,13 @@ APK 内不包含 `.litertlm` / `.gguf` 模型权重。合并 Manifest 没有 INT
 未在荣耀 90 验收 CPU 性能、发热、内存、系统省电策略、真实微信多种截图布局、Biometric 系统交互与大型图库备份峰值。模型默认 CPU；没有启用未经验证的 GPU。未执行所有 Compose 页面交互的自动验收，也未提供虚假运行截图。
 
 发布状态以实际 GitHub 操作结果为准，工作流文件存在不代表远端 Actions 或 Release 已成功。
+
+## 远端发布验证
+
+GitHub Actions [运行 41015048930](https://github.com/J-Ruan/Between-Us/actions/runs/41015048930) 成功，用时 4m23s，完成测试、Lint、APK 构建、Manifest / 内容检查和 GITHUB_TOKEN 预发布。首次 CI 在 SDK 初始化失败；最终按官方镜像说明使用 Ubuntu 24.04 预装的 SDK 35，应用源码没有改变。额外 `-ci.2` 标签仅重试 CI，不移动已有 `v0.1.0-beta.1` 源码标签。
+
+[Release](https://github.com/J-Ruan/Between-Us/releases/tag/v0.1.0-beta.1) 确认为 Pre-release，实际包含 `app-debug.apk` 与 `SHA256SUMS.txt`。发布 APK 重新下载后 SHA-256 为：
+
+`6fde2b481cec6f5a4202ed7859576ad593fc517d7b3888599331dbe83e8fee2d`
+
+发布 APK 大小 104,195,632 字节，签名与 ZIP 对齐验证通过，实际二进制 Manifest 也无 INTERNET / 存储读取权限。其 Debug 签名由 GitHub runner 生成，与本地云机器签名不同，因此上文本地 APK 哈希与发布 APK 哈希不同。设备测试运行于本地构建的同一应用源码；没有声称重新在真机安装远端签名的 APK。
