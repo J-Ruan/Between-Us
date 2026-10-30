@@ -24,6 +24,8 @@ An offline-first native Android app for private chat memories, bundled Chinese O
 
 已发布 [v0.1.0-beta.2 预发布版](https://github.com/J-Ruan/Between-Us/releases/tag/v0.1.0-beta.2)：[下载 app-debug.apk](https://github.com/J-Ruan/Between-Us/releases/download/v0.1.0-beta.2/app-debug.apk)（约 99.4 MiB）与 [SHA256SUMS.txt](https://github.com/J-Ruan/Between-Us/releases/download/v0.1.0-beta.2/SHA256SUMS.txt)。[发布构建](https://github.com/J-Ruan/Between-Us/actions/runs/41023793584) 已成功；发布制品已重新下载并校验。也可从成功的 Actions 构建下载 `shiyan-debug-apk`。本地构建产物位于 `app/build/outputs/apk/debug/app-debug.apk`。
 
+**从 GitHub beta.1 升级注意：本次已核对 Debug 签名不同，不能直接覆盖安装；请先按[备份迁移指南](docs/UPGRADE-BETA2.md)保存资料。备份失败不要卸载。**
+
 Android 8.0+，arm64-v8a / x86_64。重点目标荣耀 90；尚需在该设备验收性能、发热与本地模型兼容性。允许系统“安装未知应用”后打开 APK。它使用 Debug 签名，不是正式商店签名；不同机器生成的 Debug 密钥可能不同，无法直接覆盖安装。需要卸载时务必先备份，并确认密码可恢复。
 
 ## 第一次使用

@@ -40,3 +40,7 @@ JUnit 原始结果见 [Android](test-results/ocr-android.xml)、[OCR 几何](tes
 [beta.2 发布构建](https://github.com/J-Ruan/Between-Us/actions/runs/41023793584) 成功（2m23s），[Release](https://github.com/J-Ruan/Between-Us/releases/tag/v0.1.0-beta.2) 实际包含 APK 与校验文件。发布 APK 已重新下载，SHA-256 与 Release 文件一致，签名、ZIP 对齐、无 INTERNET 权限、无 Qwen 权重检查通过。
 
 发布 APK SHA-256：`699b01ae11f5d722ea16d1729aee54916c7e80bc431aeb778729b921cc82fda1`。这是 runner 签名的发布文件，区别于上面的本地构建哈希。
+
+实际比对两个 GitHub Release 的 APK，签名证书不同；不能直接覆盖升级。备份迁移与重新识别步骤见 [升级指南](UPGRADE-BETA2.md)。从完整备份恢复后需要重新打开应用加载截图预览，这是当前 UI 缓存的限制，数据与图片文件已恢复。
+
+同一长截图的实际对照输出为 `tiled=7/7; old longest-edge downsample=0/7`，两条路径都使用相同简体整理方式；这里计数的是完整匹配的测试句子，并非字符准确率。
